@@ -36,13 +36,14 @@ class Plugin:
 def substances_exist_group():
     pass
 
-@substances_exist_group.command(help="Pipe in; or enter list of names or ids followed by CTRL-D")
+@substances_exist_group.command(help="Pipe in; or enter list of names or ids followed by Ctrl-D")
 # e.g. cat temp.txt | python3 bin/gsrspyclient.py substancesexist
 def substancesexist():
     plugin = Plugin()
+    print("Enter a list of substance uuids or names one per line, followed by Ctrl-D")
     lines = sys.stdin.read().splitlines()
     gsrs.utils.strip_list(lines)
-    print(str(lines))
+    # print(str(lines))
     plugin.substances_exist(lines)
 
 # add commands to the main @click menu

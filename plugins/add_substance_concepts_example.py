@@ -84,13 +84,14 @@ class Plugin:
 ## CLI commands specific to substances_exist
 
 @click.group()
-def add_concepts_example_group():
+def add_substance_concepts_example_group():
     pass
 
-@add_concepts_example_group.command(help="Pipe in; or enter list of names or ids followed by CTRL-D")
+@add_substance_concepts_example_group.command(help="Pipe in; or enter list of names or ids followed by Ctrl-D")
 # e.g. cat temp.txt | python3 bin/gsrspyclient.py substancesexist
-def addconcepts():
+def addsubstanceconcepts():
     plugin = Plugin()
+    print("Enter tab delimited data followed by Ctrl-D")
     # lines = sys.stdin.read().splitlines()
     data = pandas.read_csv(sys.stdin, sep='\t', quoting=csv.QUOTE_NONE)
     for record in data.to_dict(orient='records'):
@@ -99,4 +100,4 @@ def addconcepts():
     # plugin.substances_exist(lines)
 
 # add commands to the main @click menu
-gsrs.click.manager.add_source(add_concepts_example_group)
+gsrs.click.manager.add_source(add_substance_concepts_example_group)
