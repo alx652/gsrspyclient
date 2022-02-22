@@ -1,0 +1,14 @@
+default_host_key: localhost1
+auth_username: admin
+auth_password: admin
+auth_key: none
+host_keys:
+  localhost1:
+    base_url: http://localhost:8081/api/v1/
+    auth_username: admin
+    auth_password: admin
+    auth_key: none
+verbose:
+  json_request: 0
+  json_response: 0
+  exceptions: 0
