@@ -9,7 +9,7 @@ import gsrs.ezrest
 import gsrs.config
 import gsrs.click
 import gsrs.utils
-import pandas
+import pandas as pandas
 import csv
 
 class Plugin:

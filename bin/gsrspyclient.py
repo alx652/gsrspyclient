@@ -26,8 +26,8 @@ if __name__ == '__main__':
 # loading any registered in config.
 plugins = {}
 plugins['substances_exist'] = importlib.import_module('plugins.substances_exist')
-
 plugins['add_substance_concepts_example'] = importlib.import_module('plugins.add_substance_concepts_example')
+plugins['users'] = importlib.import_module('plugins.users')
 
 @click.group()
 def cli1():

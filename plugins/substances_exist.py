@@ -40,7 +40,7 @@ def substances_exist_group():
 # e.g. cat temp.txt | python3 bin/gsrspyclient.py substancesexist
 def substancesexist():
     plugin = Plugin()
-    print("Enter a list of substance uuids or names one per line, followed by Ctrl-D")
+    print("\nEnter a list of substance uuids or names one per line, followed by Ctrl-D\n")
     lines = sys.stdin.read().splitlines()
     gsrs.utils.strip_list(lines)
     # print(str(lines))
