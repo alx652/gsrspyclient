@@ -9,6 +9,7 @@ host_keys:
     auth_password: admin
     auth_key: none
 verbose:
-  json_request: 0
-  json_response: 0
-  exceptions: 0
+  log_start_stop: 1
+  json_request: 1
+  json_response: 1
+  exceptions: 1

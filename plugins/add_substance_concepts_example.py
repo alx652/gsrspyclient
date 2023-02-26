@@ -75,7 +75,7 @@ class Plugin:
         for key in data.keys():
             json_text = json_text.replace(key, data[key])
         # print(json_text)
-        url = gsrs.config.get_base_url() + 'substances';
+        url = gsrs.config.get_base_url() + 'substances'
         args = {}
         gsrs.ezrest.post(url, '', json_text, **args)
 
@@ -87,7 +87,7 @@ class Plugin:
 def add_substance_concepts_example_group():
     pass
 
-@add_substance_concepts_example_group.command(help="Pipe in; or enter list of names or ids followed by Ctrl-D")
+@add_substance_concepts_example_group.command(help="Pipe in, or enter list of names or ids followed by Ctrl-D")
 # e.g. cat temp.txt | python3 bin/gsrspyclient.py substancesexist
 def addsubstanceconcepts():
     plugin = Plugin()
