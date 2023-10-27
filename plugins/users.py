@@ -127,8 +127,10 @@ def deactivate(**kwargs):
         response = gsrs.ezrest.delete(url, username, '{}', **args)
 
 if __name__ == 'plugins.users':
-    usersgroup()
-
+    # usersgroup()
+    pass
+    
 if __name__ == '__main__':
     # add commands to the main @click menu
-    gsrs.click.manager.add_source(usersgroup)
+    # gsrs.click.manager.add_source(usersgroup)
+    pass

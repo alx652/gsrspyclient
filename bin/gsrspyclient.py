@@ -27,14 +27,29 @@ from ppretty import ppretty
 gsrs.click.manager = click.CommandCollection(help=None, no_args_is_help=False)
 
 @click.group()
-def gsrspygroup():
+def cli():
     pass
 
 # print(ppretty(gsrs.click.manager))
 
+# plugins = {}
+# print("here0")
+# plugins['users'] = importlib.import_module('plugins.users')
+# print("here2")
+# plugins['substanceutils'] = importlib.import_module('plugins.substanceutils')
+# print("here1")
+
+
 plugins = {}
-print("here0")
 plugins['users'] = importlib.import_module('plugins.users')
-print("here2")
 plugins['substanceutils'] = importlib.import_module('plugins.substanceutils')
-print("here1")
+plugins['deployment'] = importlib.import_module('plugins.deployment')
+
+
+cli.add_command(getattr(plugins['users'], 'users'))
+cli.add_command(getattr(plugins['substanceutils'], 'substanceutils'))
+cli.add_command(getattr(plugins['deployment'], 'deployment'))
+
+
+
+cli()

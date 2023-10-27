@@ -2,14 +2,26 @@ default_host_key: localhost1
 auth_username: admin
 auth_password: admin
 auth_key: none
+storage_dirs:
+    ncats1:
+      type: 'aws'
+      dir:  's3:://gsrs-storage/'
 host_keys:
   localhost1:
     base_url: http://localhost:8081/api/v1/
     auth_username: admin
     auth_password: admin
     auth_key: none
-verbose:
-  log_start_stop: 1
-  json_request: 1
-  json_response: 1
-  exceptions: 1
+logging:
+  general:
+    timer: 1
+    startend: 1
+    summary: 1
+    request: 0
+    response: 0
+    exceptions: 1
+    traceback: 1
+  defined:
+    summary: 1
+    request: 1
+    response: 1
