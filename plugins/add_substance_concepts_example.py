@@ -83,7 +83,7 @@ class Plugin:
 ## This is not part of class.
 ## CLI commands specific to substances_exist
 
-@click.group()
+@cli.group()
 def add_substance_concepts_example_group():
     pass
 
