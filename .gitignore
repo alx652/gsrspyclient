@@ -157,3 +157,7 @@ cython_debug/
 
 data/
 work/
+
+
+.DS_Store
+.DS_Store?

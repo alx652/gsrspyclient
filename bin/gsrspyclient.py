@@ -1,5 +1,5 @@
 import sys
-sys.path.append('lib')
+sys.path.append('applib')
 sys.path.append('./')
 import os
 
@@ -44,11 +44,13 @@ plugins = {}
 plugins['users'] = importlib.import_module('plugins.users')
 plugins['substanceutils'] = importlib.import_module('plugins.substanceutils')
 plugins['deployment'] = importlib.import_module('plugins.deployment')
+plugins['clinicaltrials'] = importlib.import_module('plugins.clinicaltrials')
 
 
 cli.add_command(getattr(plugins['users'], 'users'))
 cli.add_command(getattr(plugins['substanceutils'], 'substanceutils'))
 cli.add_command(getattr(plugins['deployment'], 'deployment'))
+cli.add_command(getattr(plugins['clinicaltrials'], 'clinicaltrials'))
 
 
 

@@ -1,0 +1,59 @@
+deployments:
+  gsrsdevpublic:
+      # Context variables are only meant to be used within the yaml file. 
+      # They are interpolated into the rest of this yaml on load. 
+      # But the context is deleted just after load. 
+      # Beyond, the initial load, they are not be available in the deployment cli commands.   
+      context:
+        BASE_DIR: /Users/welscha2/Documents/d/deps/deployments/gsrsdevpublic
+        SINGLE_TOMCAT_DIRS_CONFIGS: /Users/welscha2/Documents/d/deps/deployments/configs
+        SINGLE_TOMCAT_DIRS_WEBAPPS: /var/lib/tomcat9/webapps
+        SINGLE_TOMCAT_DIRS_LOGS: /var/lib/tomcat9/logs
+      base_dir: $BASE_DIR
+      strategy: single_tomcat
+      single_tomcat: 
+        data: 
+          dir: $BASE_DIR/data
+        version: tomcat9
+        os: linux
+        os_flavor: ubuntu
+        stop_tomcat: 'sudo service tomcat9 stop'
+        start_tomcat: 'sudo service tomcat9 start'
+        restart_tomcat: 'sudo service tomcat9 restart'
+        tomcat_status: sudo service tomcat9 status'
+        dirs:
+          configs: $SINGLE_TOMCAT_DIRS_CONFIGS
+          webapps: $SINGLE_TOMCAT_DIRS_WEBAPPS 
+          logs: $SINGLE_TOMCAT_DIRS_LOGS
+        copy_map: 
+          substances: 
+          - substances_application.conf: $SINGLE_TOMCAT_DIRS_WEBAPPS/substances/WEB-INF/classes/application.conf
+          - codeSystem.json: $SINGLE_TOMCAT_DIRS_WEBAPPS/substances/WEB-INF/classes/codeSystem.json
+          clinical-trials:             
+          - clinical-trials_application.conf: $SINGLE_TOMCAT_DIRS_WEBAPPS/clinical-trials/WEB-INF/classes/application.conf
+          frontend:             
+          - frontend_application.properties: $SINGLE_TOMCAT_DIRS_WEBAPPS/frontend/WEB-INF/classes/application.properties
+          gateway:             
+          - gateway_application.yml: $SINGLE_TOMCAT_DIRS_WEBAPPS/gateway/WEB-INF/classes/application.yml
+      services_impl:
+          dir: $BASE_DIR/gsrs-ci
+          services:
+            - substances
+            - frontend
+            - gateway
+            - clinical-trials
+      frontend:
+        repo: 
+          dir: $BASE_DIR/frontend/GSRSFrontend
+          builder: 'npm run build:fda:prod'
+      starters:
+        dir: $BASE_DIR/starters
+        modules:
+        - gsrs-spring-starter
+        - gsrs-spring-module-substances
+        - gsrs-spring-module-adverse-events 
+        - gsrs-spring-module-clinical-trials
+        - gsrs-spring-module-drug-applications 
+        - gsrs-spring-module-impurities 
+        - gsrs-spring-module-drug-products
+        - gsrs-spring-module-ssg4

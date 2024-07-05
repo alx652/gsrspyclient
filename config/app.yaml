@@ -8,7 +8,7 @@ storage_dirs:
       dir:  's3:://gsrs-storage/'
 host_keys:
   localhost1:
-    base_url: http://localhost:8081/api/v1/
+    base_url: http://localhost:9081/api/v1/
     auth_username: admin
     auth_password: admin
     auth_key: none
@@ -17,11 +17,23 @@ logging:
     timer: 1
     startend: 1
     summary: 1
-    request: 0
-    response: 0
+    request: 1
+    response: 1
     exceptions: 1
     traceback: 1
   defined:
     summary: 1
     request: 1
     response: 1
+
+
+
+
+
+ 
+
+
+
+
+
+
