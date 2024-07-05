@@ -12,11 +12,9 @@ startTime = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
 FORMATTER = logging.Formatter("%(message)s")
 GENERAL_LOG_FILE = 'data/logs/'+ startTime +'-general.log'
-SUMMARY_LOG_FILE = 'data/logs/'+ startTime +'-summary.log'
+ADHOC_LOG_FILE = 'data/logs/'+ startTime +'-adhoc.log'
 REQUEST_LOG_FILE = 'data/logs/'+ startTime +'-request.log'
 RESPONSE_LOG_FILE = 'data/logs/'+ startTime +'-response.log'
-
-
 
 def get_console_handler():
    console_handler = logging.StreamHandler(sys.stdout)
@@ -39,8 +37,8 @@ def get_request_file_handler():
    file_handler.setFormatter(FORMATTER)
    return file_handler
 
-def get_summary_file_handler():  
-   file_handler = logging.FileHandler(SUMMARY_LOG_FILE, mode='w', encoding='utf8')
+def get_adhoc_file_handler():  
+   file_handler = logging.FileHandler(ADHOC_LOG_FILE, mode='w', encoding='utf8')
    file_handler.setFormatter(FORMATTER)
    return file_handler
 
@@ -54,8 +52,8 @@ def get_logger(logger_name):
       logger.addHandler(get_request_file_handler())
    if logger_name == 'response':
       logger.addHandler(get_response_file_handler())
-   if logger_name == 'summary':
-      logger.addHandler(get_summary_file_handler())         
+   if logger_name == 'adhoc':
+      logger.addHandler(get_adhoc_file_handler())         
    logger.propagate = False
    return logger
 
@@ -64,11 +62,18 @@ def noneOk(value):
     return value
 
 def printableLogString(label, value):
-    return label + ': ' + noneOk(value)
+   if label is None or label == '': 
+      return  noneOk(value)
+   else: 
+      return label + ': ' + noneOk(value)
 
-def logSummary(value):
-    if gsrs.config.config['logging']['general']['summary'] and gsrs.config.config['logging']['general']['summary']==1:
-        summary_logger.info(noneOk(value))
+def logAdhoc(value):
+    if gsrs.config.config['logging']['general']['adhoc'] and gsrs.config.config['logging']['general']['adhoc']==1:
+        adhoc_logger.info(noneOk(value))
+
+def logStandard(value):
+    if gsrs.config.config['logging']['general']['standard'] and gsrs.config.config['logging']['general']['standard']==1:
+        general_logger.info(printableLogString(None, value))
 
 def logRequest(value):
     if gsrs.config.config['logging']['general']['request'] and gsrs.config.config['logging']['general']['request']==1:
@@ -99,7 +104,7 @@ def logEndMethod(value):
         general_logger.info("=== Ending " + value + "===\n")
 
 
-summary_logger = get_logger('summary')
+adhoc_logger = get_logger('adhoc')
 general_logger = get_logger('general')
 request_logger = get_logger('request')
 response_logger = get_logger('response')

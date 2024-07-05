@@ -173,19 +173,6 @@ def bulk_post_or_put_trial_meta(csv_file):
             logList.append("\n")
             gsrs.logging.logSummary("\t".join(logList))
     
-
-# def noneOk(value):
-#     value = '' if value is None else value
-#     return value
-
-
-
-# def logSummary(value):
-#     if gsrs.config.config['logging']['general']['summary'] and gsrs.config.config['logging']['general']['summary']==1:
-#         summary_logger.info(noneOk(value))
-
-
-
 if __name__ == 'plugins.clinicaltrials':
     pass
 
