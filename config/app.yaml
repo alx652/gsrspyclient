@@ -14,15 +14,15 @@ host_keys:
     auth_key: none
 logging:
   general:
+    standard: 1
     timer: 1
-    startend: 1
+    startend: 0
     summary: 1
-    request: 1
-    response: 1
+    request: 0
+    response: 0
     exceptions: 1
     traceback: 1
   defined:
-    summary: 1
     request: 1
     response: 1
 
