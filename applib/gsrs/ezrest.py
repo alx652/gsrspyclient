@@ -75,12 +75,11 @@ def put(url, id, json_text, **args):
     
 
 def delete(url, id, json_text, **args):
-    logStartMethod("DELETE")
+    gsrs.logging.logStartMethod("DELETE")
     exceptions = []
     rc = ''
     try:
        _headers={'Content-Type': 'application/json', 'auth-username': gsrs.config.config['auth_username'], 'auth-password': gsrs.config.config['auth_password'],  'charset': 'utf-8'}
-       # json_loaded = json.loads(json_text)
        gsrs.logging.logRequest(json_text)
        response = requests.delete(url, data=json_text, headers=_headers, verify=False)
        if response.status_code:

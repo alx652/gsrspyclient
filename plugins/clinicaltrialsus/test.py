@@ -5,21 +5,24 @@ import plugins.clinicaltrialsus.functions
 from io import StringIO  
 import csv
 from datetime import datetime
+from gsrs.dire import * 
+csv.field_size_limit(sys.maxsize)
 
 mapperInstance = plugins.clinicaltrialsus.mapper.Mapper()
 fm = mapperInstance.fieldMap 
 
-def bulkDownloadTrialsByPage(): 
-  pageSize=10
+def bulkDownloadTrialsByPage(csv_file): 
+  pageSize=1000
   pageTokenQs = ''
   totalCount = None;
   finished = False
   csvFields = []
   urlTemplate = "https://clinicaltrials.gov/api/v2/studies?format=csv&countTotal=true&pageSize={0}{1}"
   i=0
-  with open('eggs.csv', 'w', newline='') as file:
+  with open(csv_file, 'w', newline='') as file:
     while(not finished):
       i=i+1
+      warn("Getting up to " +  str(pageSize) +" records, up to total "+ str(i*pageSize))
       urlFormatted = urlTemplate.format(pageSize, pageTokenQs)
       response = requests.get(urlFormatted)
       if (i==1 and ('x-total-count' in response.headers)):    
@@ -30,11 +33,11 @@ def bulkDownloadTrialsByPage():
         pageTokenQs = '&pageToken=' + response.headers['x-next-page-token']  
       else:
         finished = True
-      if i>10:    
-        finished = True
+#      if i>10:    
+#        finished = True
 
-def extractIdsFromCsvFile(): 
-  with open('eggs.csv', 'r', newline='') as file:
+def extractIdsFromCsvFile(csv_file): 
+  with open(csv_file, 'r', newline='') as file:
     csv_reader = csv.DictReader(file)
     for row in csv_reader:
         print(row['NCT Number'])
@@ -76,3 +79,13 @@ def getGsrsTrialAsDict(trialNumber):
   return d
 
 
+def skipPutWhenLastUpdateDatesEqual(gsrsDate, csvDate):
+  try: 
+    csvDateAsMillis = plugins.clinicaltrialsus.functions.makeMillisFromClinicalTrialsGovDateString(csvDate)
+    if (gsrsDate == csvDateAsMillis): 
+      return True
+  except Exception as e:
+      return False
+  
+
+ 
