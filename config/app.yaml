@@ -17,7 +17,7 @@ logging:
     standard: 1
     timer: 1
     startend: 0
-    summary: 1
+    adhoc: 1
     request: 0
     response: 0
     exceptions: 1
