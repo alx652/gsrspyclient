@@ -6,11 +6,12 @@ import json
 import gsrs.config
 
 def get(url, id, **args):
+    _headers={'auth-username': gsrs.config.config['auth_username'], 'auth-password': gsrs.config.config['auth_password'],  'charset': 'utf-8'}
     gsrs.logging.logStartMethod("GET")
     exceptions = []
     rc = ''
     try:
-       response = requests.get(url, verify=False)
+       response = requests.get(url, headers=_headers, verify=False)
        if response.status_code:
           rc = response.status_code
        id  = "NOID" if id is None else id

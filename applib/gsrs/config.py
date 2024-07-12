@@ -1,6 +1,6 @@
 import yaml
 
-with open("config/app.yaml", "r") as ymlfile:
+with open("config/app.yaml", "r", encoding="utf-8") as ymlfile:
     config = yaml.full_load(ymlfile)
 
 
