@@ -6,7 +6,9 @@ from io import StringIO
 import csv
 from datetime import datetime
 from gsrs.dire import * 
-csv.field_size_limit(sys.maxsize)
+# csv.field_size_limit(sys.maxsize)
+csv.field_size_limit(2147483647)
+
 
 mapperInstance = plugins.clinicaltrialsus.mapper.Mapper()
 fm = mapperInstance.fieldMap 
@@ -19,7 +21,7 @@ def bulkDownloadTrialsByPage(csv_file):
   csvFields = []
   urlTemplate = "https://clinicaltrials.gov/api/v2/studies?format=csv&countTotal=true&pageSize={0}{1}"
   i=0
-  with open(csv_file, 'w', newline='') as file:
+  with open(csv_file, 'w', newline='', encoding="utf-8") as file:
     while(not finished):
       i=i+1
       warn("Getting up to " +  str(pageSize) +" records, up to total "+ str(i*pageSize))
@@ -37,7 +39,7 @@ def bulkDownloadTrialsByPage(csv_file):
 #        finished = True
 
 def extractIdsFromCsvFile(csv_file): 
-  with open(csv_file, 'r', newline='') as file:
+  with open(csv_file, 'r', newline='', encoding="utf-8") as file:
     csv_reader = csv.DictReader(file)
     for row in csv_reader:
         print(row['NCT Number'])
@@ -48,11 +50,14 @@ def getSingleTrialAsCsvText(trialNumber):
   response = requests.get(urlFormatted)
   return response.text
 
-def makeDictFromTrialCsvText(csvText):
-  d = dict()
+def makeCsvDictFromTrialCsvText(csvText):
   file = StringIO(csvText)
   csv_reader = csv.DictReader(file)
   trial = next(csv_reader)
+  return trial
+
+def makeGsrsDictFromTrialCsvText(csvText):
+  trial = makeCsvDictFromTrialCsvText(csvText)
   return makeGsrsTrialDictFromCsvDict(trial)
 
 def makeGsrsTrialDictFromCsvDict(trial):

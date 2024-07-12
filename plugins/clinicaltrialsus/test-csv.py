@@ -11,7 +11,7 @@ fm = mapper.Mapper().fieldMap
 fields = []
 rows = []
 
-with open(filename, mode='r') as file:
+with open(filename, mode='r', encoding="utf-8") as file:
     csv_reader = csv.DictReader(file)
     trials = []
     for row in csv_reader:
