@@ -6,7 +6,10 @@ from io import StringIO
 import csv
 from datetime import datetime
 from gsrs.dire import * 
+
+# linux
 # csv.field_size_limit(sys.maxsize)
+# windows
 csv.field_size_limit(2147483647)
 
 
@@ -48,7 +51,8 @@ def getSingleTrialAsCsvText(trialNumber):
   urlTemplate = 'https://clinicaltrials.gov/api/v2/studies/{0}?format=csv&markupFormat=legacy'
   urlFormatted = urlTemplate.format(trialNumber)
   response = requests.get(urlFormatted)
-  return response.text
+  # rather than response.text because windows  
+  return response.content.decode('utf-8')
 
 def makeCsvDictFromTrialCsvText(csvText):
   file = StringIO(csvText)

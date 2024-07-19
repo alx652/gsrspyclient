@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from dateutil import parser
+
 import re
 
 def normalizeDateSeparator(dateString):
@@ -19,11 +20,15 @@ def blankIfNullAndTrim(s):
         return ''       
     return s.strip()
 
-def datetimeToEpochMillis(dt):
+
+
+def use_later_datetimeToEpochMillis(dt):
+    # this doesn't work on windows if date is less than 1970-01-01
     return (int(dt.timestamp() * 1000))
 
-
-
+def datetimeToEpochMillis(dt):
+    ts = int((dt-datetime(1970,1,1)).total_seconds()*1000)
+    return ts
 
 def makeDateFromYearMonthDayString(dateString):
     try:
@@ -63,3 +68,6 @@ def makeMillisFromClinicalTrialsGovDateString(dateString):
     if d is not None:
         return datetimeToEpochMillis(d)
     return 0
+
+
+

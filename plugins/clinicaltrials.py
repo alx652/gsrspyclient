@@ -13,6 +13,7 @@ import gsrs.click
 import gsrs.utils
 
 import plugins.clinicaltrialsus.test 
+import plugins.clinicaltrialsus.functions 
 
 
 from ppretty import ppretty
@@ -40,25 +41,14 @@ def clinicaltrials():
     pass
 
 @clinicaltrials.command(help="Pipe in, or enter list of names or ids followed by Ctrl-D")
-def update_meta_data():
-    trialNumber='NCT00132639'
-    plugin = Plugin()
-    url = gsrs.config.get_base_url() + 'clinicaltrialsus/' + trialNumber
-    args = {}
-    t1 = datetime.now()
-    response = gsrs.ezrest.get(url, **args)
-    print(response.text)
-
-
-@clinicaltrials.command(help="Pipe in, or enter list of names or ids followed by Ctrl-D")
 @click.argument('trial-number', nargs=1)
 def post_trial_meta(trial_number):
-    trialCsvText = plugins.clinicaltrialsus.test.getSingleTrialAsCsvText(trial_number)
-    trialDict =  plugins.clinicaltrialsus.test.makeGsrsDictFromTrialCsvText(trialCsvText)
     plugin = Plugin()
+    newMetaCsvText = plugins.clinicaltrialsus.test.getSingleTrialAsCsvText(trial_number)
+    newMetaCsvDict =  plugins.clinicaltrialsus.test.makeCsvDictFromTrialCsvText(newMetaCsvText)
     url = gsrs.config.get_base_url() + 'clinicaltrialsus'
     args = {}
-    response = gsrs.ezrest.post(url, trial_number, json.dumps(trialDict, indent=2), **args)
+    response = gsrs.ezrest.post(url, trial_number, json.dumps(newMetaCsvDict, indent=2), **args)
 
 """
 stages
@@ -132,6 +122,7 @@ def _post_or_put_trial_meta(newMetaCsvDict, skip_if_last_updated_equal):
         args = {}
         gsrsTrialDict = plugins.clinicaltrialsus.test.makeGsrsTrialDictFromCsvDict(newMetaCsvDict)
         postResponse = gsrs.ezrest.post(postUrl, trial_number, json.dumps(gsrsTrialDict, indent=2), **args)
+
         if postResponse.status_code: 
             logList.append(str(postResponse.status_code))
         else:
@@ -157,7 +148,9 @@ def extract_ids_from_csv_file(csv_file):
 @clinicaltrials.command(help="Update meta data on gsrs instance, using a source csv file")
 @click.argument('csv_file', nargs=1)
 @click.option('--skip-if-last-updated-equal', is_flag=True)
-def bulk_post_or_put_trial_meta(csv_file, skip_if_last_updated_equal):
+@click.option('--start-id')
+@click.option('--end-id')
+def bulk_post_or_put_trial_meta(csv_file, skip_if_last_updated_equal, start_id, end_id):
     with open(csv_file, mode='r', encoding="utf-8") as file:
         plugin = Plugin()
         csv_reader = csv.DictReader(file)
@@ -166,6 +159,18 @@ def bulk_post_or_put_trial_meta(csv_file, skip_if_last_updated_equal):
             trials.append(row)
         sortedTrials = sorted(trials, key=lambda d: d['NCT Number'])
         for newMetaCsvDict in sortedTrials:
+            tn = newMetaCsvDict['NCT Number']
+            if not (start_id is None) and not (end_id is None):
+                if not (tn >= start_id and tn <= end_id):
+                    continue
+            elif not (start_id is None) and end_id is None:
+                if not (tn >= start_id): 
+                    continue
+            elif start_id is None and not (end_id is None): 
+                if not (tn <= end_id):
+                    continue
+
+
             _post_or_put_trial_meta(newMetaCsvDict, skip_if_last_updated_equal)
 
 
@@ -203,6 +208,17 @@ def _get_last_updated_by_trial(ids, show_formatted):
         if show_formatted: 
             row.append(datetime.fromtimestamp(dict['lastUpdated']/1000.0).strftime("%Y %m %d %H:%M:%S"))
         print ("\t".join(row))
+
+
+@clinicaltrials.command(help="test1")
+def get_trial_numbers_from_gsrs():
+   print (len(gsrs.ezrest.get_id_strings_by_entity('clinicaltrialsus', 500, 1000)))
+
+@clinicaltrials.command(help="test2")
+def get_indexed_count():
+   print (gsrs.ezrest.get_count_by_indexed_entity())
+
+
 
 if __name__ == 'plugins.clinicaltrials':
     pass
