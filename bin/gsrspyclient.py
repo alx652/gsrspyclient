@@ -3,7 +3,6 @@ sys.path.append('applib')
 sys.path.append('./')
 import os
 
-# exit()
 import yaml
 import click
 import requests
